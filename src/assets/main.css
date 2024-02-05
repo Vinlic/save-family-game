@@ -1,0 +1,12 @@
+@import './base.css';
+
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+@font-face {
+  font-family: 'zpix';
+  src: url('fonts/zpix.woff2') format('woff2'), url('fonts/zpix.ttf') format('truetype');
+  /* src: url('fonts/pixels.ttf') format('truetype'); */
+}
