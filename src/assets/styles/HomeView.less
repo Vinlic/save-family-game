@@ -53,23 +53,6 @@
   display: block;
 }
 
-.transition-mask {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: #000;
-  opacity: 0;
-  z-index: 999;
-  display: none;
-}
-
-.transition-mask-active {
-  animation: transition-mask-animate 2s ease-in-out;
-  display: block;
-}
-
 .submit-btn {
     width: 80%;
     margin: 30px auto 0 auto;
@@ -80,31 +63,89 @@
     border-image-repeat: stretch !important;
 }
 
-@keyframes transition-mask-animate {
-  0% {
-    opacity: 0;
-  }
-  45% {
-    opacity: 1;
-  }
-  55% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+.nes-input {
+  letter-spacing: 2px;
+}
+
+.save-item {
+  width: 33.33%;
+  padding: 6px 8px;
+  display: inline-block;
+  transition: all 300ms ease;
+  border-radius: 5px;
+}
+
+.save-item:hover {
+  background: #eee;
+}
+
+.save-item-image {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.save-item-image img {
+  width: 100%;
+  height: 100%;
+}
+
+.save-item-info span {
+  font-size: 16px;
+  display: block;
+}
+
+.save-item-info span:last-child {
+  font-size: 12px;
+  letter-spacing: 0px;
+}
+
+.achievement-item {
+  width: 33.33%;
+  padding: 6px 8px;
+  display: inline-block;
+  transition: all 300ms ease;
+  border-radius: 5px;
+}
+
+.achievement-item:hover {
+  background: #eee;
+}
+
+.achievement-item-image {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.achievement-item-image img {
+  width: 100%;
+  height: 100%;
+}
+
+.achievement-item-info span {
+  font-size: 16px;
+  display: block;
+}
+
+.achievement-item-info span:last-child {
+  font-size: 12px;
+  letter-spacing: 0px;
+}
+
+.name-tip {
+  margin-top: 10px;
+  display: block;
 }
 
 @keyframes title-animate {
   from {
     transform: translateY(0);
-    // transform-origin: center 500px;
-    // transform: rotate(0deg);
   }
   to {
     transform: translateY(30px);
-    // transform-origin: center 500px;
-    // transform: rotate(-360deg);
   }
 }
 

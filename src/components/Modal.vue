@@ -7,8 +7,11 @@ defineProps<{
   height?: string
   maxWidth?: string
   maxHeight?: string
+  innerMinHeight?: string
+  innerMaxHeight?: string
   minWidth?: string
   minHeight?: string
+  disableClose?: boolean
 }>()
 
 const show = ref(false);
@@ -28,6 +31,8 @@ const close = () => {
   });
 }
 
+const stop = () => {};
+
 defineExpose({
   open,
   close
@@ -35,7 +40,7 @@ defineExpose({
 </script>
 
 <template>
-  <div v-show="show" class="modal-mask">
+  <div v-show="show" class="modal-mask" @click="disableClose ? stop() : close()">
     <div :class="'modal' + (hide ? ' modal-closing' : '')" :style="{
       width,
       height,
@@ -43,16 +48,16 @@ defineExpose({
       'max-height': maxHeight,
       'min-width': minWidth,
       'min-height': minHeight
-    }" @animationend="hideAnimationEnd">
+    }" @animationend="hideAnimationEnd" @click.stop="stop">
       <div class="modal-header">
         <div>
           <span>{{ title }}</span>
         </div>
-        <div @click="close">
+        <div v-if="!disableClose" @click="close">
           <i class="nes-icon close is-small"></i>
         </div>
       </div>
-      <div class="modal-container">
+      <div class="modal-container" :style="{ 'min-height': innerMinHeight, 'max-height': innerMaxHeight }">
         <slot></slot>
       </div>
     </div>
@@ -116,8 +121,13 @@ defineExpose({
   }
 
   .modal-container {
-    padding: 15px 15px 25px 15px;
+    padding: 10px 10px 20px 10px;
     font-size: 16px;
+    overflow-y: auto;
+  }
+
+  .modal-container::-webkit-scrollbar {
+    display: none;
   }
 
 }
@@ -130,6 +140,7 @@ defineExpose({
   from {
     background: rgba(0, 0, 0, 0);
   }
+
   to {
     background: rgba(0, 0, 0, 0.7);
   }
