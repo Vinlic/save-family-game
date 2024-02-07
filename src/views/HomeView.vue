@@ -3,7 +3,9 @@ import { ref } from 'vue';
 import Modal from '@/components/Modal.vue';
 import '@/assets/styles/HomeView.less';
 
-const modal = ref<InstanceType<typeof Modal>>();
+const nameModal = ref<InstanceType<typeof Modal>>();
+const saveModal = ref<InstanceType<typeof Modal>>();
+const achievementModal = ref<InstanceType<typeof Modal>>();
 
 const transitionActive = ref(false);
 
@@ -17,11 +19,15 @@ const transition = (trigger?: Function) => {
 
 const startGame = () => {
   // transition();
-  modal.value?.open();
+  nameModal.value?.open();
 }
 
 const continueGame = () => {
+  saveModal.value?.open();
+}
 
+const openAchievement = () => {
+  achievementModal.value?.open();
 }
 
 </script>
@@ -36,8 +42,8 @@ const continueGame = () => {
         </div>
         <div class="menu">
           <button type="button" class="nes-btn" @click="startGame">新的开始</button>
-          <button type="button" class="nes-btn">不忘初心</button>
-          <button type="button" class="nes-btn">我的成就</button>
+          <button type="button" class="nes-btn" @click="continueGame">不忘初心</button>
+          <button type="button" class="nes-btn" @click="openAchievement">我的成就</button>
         </div>
         <!-- <div class="nes-field">
         <label for="name_field">Your name</label>
@@ -50,13 +56,32 @@ const continueGame = () => {
     <!-- <div class="user-info-enter">
       <input type="text" id="name_field" class="nes-input" placeholder="拯救者的名字">
     </div> -->
-    <modal ref="modal" title="名字卡片" :width="400">
+
+    <!-- 名字卡片模态框 -->
+    <modal ref="nameModal" title="名字卡片" width="80%" max-width="400px">
       <div class="nes-field">
         <label for="name_field">拯救者的名字</label>
         <input type="text" id="name_field" class="nes-input">
       </div>
       <button type="button" class="nes-btn is-success submit-btn">确认</button>
     </modal>
+
+    <modal ref="saveModal" title="我的回忆" width="80%" min-height="300px">
+      <div class="save-item">
+        <div>
+          <img src="" />
+        </div>
+        <div>
+          <span>诈骗骗局</span>
+          <span>2024/02/07 12:49:56</span>
+        </div>
+      </div>
+    </modal>
+
+    <modal ref="achievementModal" title="我的成就" width="80%" min-height="300px">
+      
+    </modal>
+
     <div :class="'transition-mask' + (transitionActive ? ' transition-mask-active' : '')"></div>
   </div>
 </template>

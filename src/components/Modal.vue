@@ -3,8 +3,12 @@ import { ref } from 'vue';
 
 defineProps<{
   title: string
-  width?: number
-  height?: number
+  width?: string
+  height?: string
+  maxWidth?: string
+  maxHeight?: string
+  minWidth?: string
+  minHeight?: string
 }>()
 
 const show = ref(false);
@@ -33,8 +37,12 @@ defineExpose({
 <template>
   <div v-show="show" class="modal-mask">
     <div :class="'modal' + (hide ? ' modal-closing' : '')" :style="{
-      width: width ? `${width}px` : undefined,
-      height: height ? `${height}px` : undefined
+      width,
+      height,
+      'max-width': maxWidth,
+      'max-height': maxHeight,
+      'min-width': minWidth,
+      'min-height': minHeight
     }" @animationend="hideAnimationEnd">
       <div class="modal-header">
         <div>
