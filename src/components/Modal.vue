@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, nextTick } from 'vue';
 
 defineProps<{
   title: string
@@ -14,12 +14,14 @@ defineProps<{
   disableClose?: boolean
 }>()
 
+const modal = ref<HTMLDivElement>();
 const show = ref(false);
 const hide = ref(false);
 const hideAnimationEnd = ref(() => { });
 
 const open = () => {
   show.value = true;
+  nextTick(() => modal.value?.focus());
 }
 
 const close = () => {
@@ -41,14 +43,14 @@ defineExpose({
 
 <template>
   <div v-show="show" class="modal-mask" @click="disableClose ? stop() : close()">
-    <div :class="'modal' + (hide ? ' modal-closing' : '')" :style="{
+    <div ref="modal" :class="'modal' + (hide ? ' modal-closing' : '')" :style="{
       width,
       height,
       'max-width': maxWidth,
       'max-height': maxHeight,
       'min-width': minWidth,
       'min-height': minHeight
-    }" @animationend="hideAnimationEnd" @click.stop="stop">
+    }" @animationend="hideAnimationEnd" @click.stop="stop" tabindex="-1">
       <div class="modal-header">
         <div>
           <span>{{ title }}</span>

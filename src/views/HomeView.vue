@@ -93,7 +93,7 @@ const confirmName = () => {
   if (!verifyNameModal())
     return showMessage('名称不合法');
   bus?.emit('transition-mask:on', {
-    message: '加载中...',
+    message: '编织骗局中...',
     callback: () => router.push('scenes')
   });
   bus?.on('page-loaded:scene-view', () => {
