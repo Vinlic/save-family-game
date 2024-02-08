@@ -1,22 +1,28 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+const overrideMessage = ref<string>();
+
 defineProps<{
   message?: string
 }>()
 
 const show = ref(false);
 const hide = ref(false);
-const hideAnimationEnd = ref(() => { });
+const animationEnd = ref<any>(() => { });
 
-const open = () => {
+const open = ({ message, callback }: { message?: string, callback?: Function }) => {
   show.value = true;
+  if(message)
+    overrideMessage.value = message;
+  if(callback)
+    animationEnd.value = callback;
 }
 
 const close = () => {
   hide.value = true;
-  hideAnimationEnd.value = (() => {
-    hideAnimationEnd.value = () => { };
+  animationEnd.value = (() => {
+    animationEnd.value = () => { };
     hide.value = false;
     show.value = false;
   });
@@ -29,9 +35,9 @@ defineExpose({
 </script>
 
 <template>
-  <div v-show="show" :class="'transition-mask' + (hide ? ' transition-mask-closing' : '')" @animationend="hideAnimationEnd">
-    <div v-if="message">
-      <span>{{ message }}</span>
+  <div v-show="show" :class="'transition-mask' + (hide ? ' transition-mask-closing' : '')" @animationend="animationEnd">
+    <div v-if="overrideMessage || message">
+      <span>{{ overrideMessage || message }}</span>
     </div>
   </div>
 </template>
@@ -45,14 +51,14 @@ defineExpose({
   left: 0;
   background: #000;
   z-index: 999;
-  animation: show-animate 500ms ease;
+  animation: show-animate 500ms linear;
   justify-content: center;
   align-items: center;
   display: flex;
 }
 
 .transition-mask-closing {
-  animation: hide-animate 500ms ease;
+  animation: hide-animate 500ms linear;
 }
 
 .transition-mask>div {

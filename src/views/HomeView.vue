@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, getCurrentInstance, nextTick } from 'vue';
 import Modal from '@/components/Modal.vue';
-import TransitionMask from '@/components/TransitionMask.vue';
-import '@/assets/styles/HomeView.less';
+import router from '@/router';
+
+const instance = getCurrentInstance();
+const bus = instance?.proxy?.$bus;
 
 const nameTipMap: Record<string, string> = {
   'vinlic': '有趣，加我微信 vinlickj 吧',
@@ -22,10 +24,20 @@ const nameTipMap: Record<string, string> = {
   'riddance': '欢迎架构师 Riddance！',
   'tao': '欢迎油桃大人！',
   '星河': '欢迎星河Agent！',
-  'huangzg': '欢迎黄佬！',
+  'huangzg': '刷会黄佬的视频。。。',
+  '黄志国': '刷会黄佬的视频。。。',
+  'name': '有趣的名字。',
+  '名字': '叫名字的名字。',
+  '黄佬': '刷会黄佬的视频。。。',
   'zhipu': '去chatglm.cn看看？',
   'chatglm': '去chatglm.cn看看？',
   '俞小琳': '俞老板好！',
+  'zr': '什么时候偷出ChatGLM-12B的权重？',
+  '普罗米修斯': '什么时候偷出ChatGLM-12B的权重？',
+  'max': '一个好名字',
+  'sans': '鸟儿在歌唱，花儿在绽放，像你这样的孩子就应该。。。',
+  'live': '生活如此美好',
+  'happier': '您幸福吗？',
   '帛凡': '帛凡大佬大驾光临！',
   'helloworld': 'console.log("你好，世界");',
   'ai': '您就是AI？',
@@ -41,7 +53,7 @@ const nameModal = ref<InstanceType<typeof Modal>>();
 const saveModal = ref<InstanceType<typeof Modal>>();
 const achievementModal = ref<InstanceType<typeof Modal>>();
 const messageModal = ref<InstanceType<typeof Modal>>();
-const transitionMask = ref<InstanceType<typeof TransitionMask>>();
+const nameInput = ref<HTMLInputElement>();
 
 const name = ref('');
 const messageText = ref('');
@@ -61,6 +73,7 @@ const achievementList = ref([
 
 const startGame = () => {
   nameModal.value?.open();
+  nextTick(() => nameInput.value?.focus());
 }
 
 const continueGame = () => {
@@ -77,9 +90,16 @@ const showMessage = (message: string) => {
 }
 
 const confirmName = () => {
-  if(!verifyNameModal())
+  if (!verifyNameModal())
     return showMessage('名称不合法');
-  transitionMask.value?.open();
+  bus?.emit('transition-mask:on', {
+    message: '加载中...',
+    callback: () => router.push('scenes')
+  });
+  bus?.on('page-loaded:scene-view', () => {
+    bus?.off('page-loaded:scene-view');
+    bus?.emit('transition-mask:off');
+  });
 }
 
 const verifyNameModal = () => {
@@ -91,17 +111,15 @@ const verifyNameModal = () => {
 
 <template>
   <div class="container">
-    <div class="welcome-container">
-      <div class="center-group">
-        <div class="title">
-          <span class="tip">[内测版]</span>
-          <span>救救家人</span>
-        </div>
-        <div class="menu">
-          <button type="button" class="nes-btn" @click="startGame">新的开始</button>
-          <button type="button" class="nes-btn" @click="continueGame">不忘初心</button>
-          <button type="button" class="nes-btn" @click="openAchievement">我的成就</button>
-        </div>
+    <div class="center-group">
+      <div class="title">
+        <span class="tip">[内测版]</span>
+        <span>救救家人</span>
+      </div>
+      <div class="menu">
+        <button type="button" class="nes-btn" @click="startGame">新的开始</button>
+        <button type="button" class="nes-btn" @click="continueGame">不忘初心</button>
+        <button type="button" class="nes-btn" @click="openAchievement">我的成就</button>
       </div>
     </div>
 
@@ -109,10 +127,12 @@ const verifyNameModal = () => {
     <modal ref="nameModal" title="名字卡片" width="85%" max-width="400px">
       <div class="nes-field">
         <label for="name-field">拯救者的名字</label>
-        <input type="text" id="name-field" class="nes-input" v-model="name" maxlength="20" />
+        <input type="text" id="name-field" class="nes-input" ref="nameInput" v-model="name" maxlength="20"
+          @keyup.enter="confirmName" autocomplete="off" />
       </div>
       <span class="name-tip" v-if="nameTipMap[name.toLowerCase()]">{{ nameTipMap[name.toLowerCase()] }}</span>
-      <button type="button" :class="'nes-btn submit-btn' + (!verifyNameModal() ? ' is-disabled' : ' is-success')" @click="confirmName">确认</button>
+      <button type="button" :class="'nes-btn submit-btn' + (!verifyNameModal() ? ' is-disabled' : ' is-success')"
+        @click="confirmName">确认</button>
     </modal>
 
     <!-- 存档模态框 -->
@@ -150,6 +170,7 @@ const verifyNameModal = () => {
       <span>{{ messageText }}</span>
     </modal>
 
-    <transition-mask ref="transitionMask" message="资源加载中..."></transition-mask>
   </div>
 </template>
+
+<style scoped>@import '@/assets/styles/HomeView.less';</style>
