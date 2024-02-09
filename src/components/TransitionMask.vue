@@ -7,7 +7,7 @@ defineProps<{
   message?: string
 }>()
 
-const show = ref(false);
+const show = ref(true);
 const hide = ref(false);
 const animationEnd = ref<any>(() => { });
 

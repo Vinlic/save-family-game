@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, getCurrentInstance, nextTick } from 'vue';
+import { ref, getCurrentInstance, onMounted, nextTick } from 'vue';
 import Modal from '@/components/Modal.vue';
 import router from '@/router';
 
@@ -72,6 +72,10 @@ const achievementList = ref([
   }
 ]);
 
+onMounted(() => {
+  bus?.emit('transition-mask:off');
+});
+
 const startGame = () => {
   nameModal.value?.open();
   nextTick(() => nameInput.value?.focus());
@@ -93,6 +97,7 @@ const showMessage = (message: string) => {
 const confirmName = () => {
   if (!verifyNameModal())
     return showMessage('名称不合法');
+  window.localStorage.setItem('username', name.value.trim());
   bus?.emit('transition-mask:on', {
     message: '编织骗局中...',
     callback: () => router.push('scenes')

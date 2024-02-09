@@ -3,6 +3,7 @@ import { ref, getCurrentInstance, onMounted } from 'vue';
 import type { Scene } from '@/interfaces/Scene';
 import Modal from '@/components/Modal.vue';
 import loader from '@/lib/loader';
+import router from '@/router';
 
 const instance = getCurrentInstance();
 const bus = instance?.proxy?.$bus;
@@ -11,9 +12,9 @@ const containerRef = ref<HTMLDivElement>();
 const currentIndex = ref(0);
 const sceneList = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
-bus?.emit('transition-mask:on', {
-    message: '编织骗局中...'
-});
+if(!localStorage.getItem('username'))
+    router.replace('/');
+
 onMounted(() => {
     loader.load((progress: number) => bus?.emit('transition-mask:message:change', `编织骗局中(${progress.toFixed(2)}%)...`))
         .then(() => {
