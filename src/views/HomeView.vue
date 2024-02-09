@@ -2,7 +2,6 @@
 import { ref, getCurrentInstance, nextTick } from 'vue';
 import Modal from '@/components/Modal.vue';
 import router from '@/router';
-import loader from '@/lib/loader';
 
 const instance = getCurrentInstance();
 const bus = instance?.proxy?.$bus;
@@ -17,6 +16,7 @@ const nameTipMap: Record<string, string> = {
   'yyc': '屌啊，卧槽',
   'cong': '屌啊，卧槽',
   '聪': '屌啊，屌啊',
+  'link': '你想连接些什么呢？',
   'mingmingv': '家明，是你！',
   'zhangcolder': '下午茶令人羡慕',
   'jiawei': '贾老师大驾光临！',
@@ -97,20 +97,12 @@ const confirmName = () => {
     message: '编织骗局中...',
     callback: () => router.push('scenes')
   });
-  bus?.on('page-loaded:scene-view', () => {
-    bus?.off('page-loaded:scene-view');
-    bus?.emit('transition-mask:off');
-  });
 }
 
 const verifyNameModal = () => {
   const _name = name.value.trim();
   return _name && _name.length <= 20 && !disabledNames.includes(_name.toLowerCase());
 }
-
-loader.run()
-  .then(() => console.log(loader.images))
-  .catch(err => console.error(err));
 </script>
 
 <template>

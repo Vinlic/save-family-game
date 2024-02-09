@@ -28,9 +28,14 @@ const close = () => {
   });
 }
 
+const changeMessage = (message: string) => {
+  overrideMessage.value = message;
+}
+
 defineExpose({
   open,
-  close
+  close,
+  changeMessage
 });
 </script>
 

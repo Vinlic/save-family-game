@@ -8,9 +8,13 @@ class Loader {
     audios = new Map<string, string>();
     videos = new Map<string, string>();
     queue: any[] = [];
+    #lock = false;
+    #loaded = false;
+    #loadQueue: any[] = [];
 
-    async loadImage(key: string, url: string, allowMIMETypes: string[] = ['image/jpeg', 'image/png', 'image/gif']) {
+    async loadImage(key: string, url: string, onProgress: Function, allowMIMETypes: string[] = ['image/jpeg', 'image/png', 'image/gif']) {
         const result = await axios.get(url, {
+            onDownloadProgress: e => onProgress((e.progress || 0) * 100),
             responseType: 'blob'
         });
         if(result.status != 200)
@@ -21,8 +25,9 @@ class Loader {
         this.images.set(key, URL.createObjectURL(result.data));
     }
 
-    async loadAudio(key: string, url: string, allowMIMETypes: string[] = ['audio/mpeg', 'audio/mp3']) {
+    async loadAudio(key: string, url: string, onProgress: Function, allowMIMETypes: string[] = ['audio/mpeg', 'audio/mp3']) {
         const result = await axios.get(url, {
+            onDownloadProgress: e => onProgress((e.progress || 0) * 100),
             responseType: 'blob'
         });
         if(result.status != 200)
@@ -33,8 +38,9 @@ class Loader {
         this.audios.set(key, URL.createObjectURL(result.data));
     }
 
-    async loadVideo(key: string, url: string, allowMIMETypes: string[] = ['video/mp4']) {
+    async loadVideo(key: string, url: string, onProgress: Function, allowMIMETypes: string[] = ['video/mp4']) {
         const result = await axios.get(url, {
+            onDownloadProgress: e => onProgress((e.progress || 0) * 100),
             responseType: 'blob'
         });
         if(result.status != 200)
@@ -45,28 +51,57 @@ class Loader {
         this.videos.set(key, URL.createObjectURL(result.data));
     }
 
-    async run() {
+    async load(onProgress?: Function) {
+        if(this.#loaded)
+            return;
+        if(this.#lock) {
+            const loadPromise = new Promise((resolve, reject) => this.#loadQueue.push({ resolve, reject }));
+            return loadPromise;
+        }
+        this.#lock = true;
+        let singleProgress = 0;
         for(let _type in resourcesMap) {
             const map = (resourcesMap as any)[_type] || {};
-            switch(_type) {
-                case 'images':
-                    for(let key in map)
-                        this.queue.push(async () => this.loadImage(key, map[key]));
-                break;
-                case 'audios':
-                    for(let key in map)
-                        this.queue.push(async () => this.loadAudio(key, map[key]));
-                break;
-                case 'videos':
-                    for(let key in map)
-                        this.queue.push(async () => this.loadVideo(key, map[key]));
-                break;
+            for(let key in map) {
+                this.queue.push(async () => {
+                    let lastProgress = 0;
+                    let loadFn;
+                    switch(_type) {
+                        case 'images':
+                            loadFn = this.loadImage.bind(this);
+                        break;
+                        case 'audios':
+                            loadFn = this.loadAudio.bind(this);
+                        break;
+                        case 'videos':
+                            loadFn = this.loadVideo.bind(this);
+                        break;
+                        default:
+                            loadFn = null;
+                    }
+                    if(!loadFn)
+                        return;
+                    await loadFn(key, map[key], (progress: number) => {
+                        const currentProgress = progress * (singleProgress / 100);
+                        this.progress += currentProgress - lastProgress;
+                        lastProgress = currentProgress;
+                    });
+                    onProgress && onProgress(this.progress);
+                });
             }
         }
+        singleProgress = 100 / this.queue.length;
         const loadPromises = [];
         for(let task of this.queue)
             loadPromises.push(task());
-        await Promise.all(loadPromises);
+        await Promise.all(loadPromises)
+            .then(() => this.#loadQueue.forEach(({ resolve }) => resolve(this)))
+            .catch(err => this.#loadQueue.forEach(({ reject }) => reject(err)));
+        this.#loaded = true;
+        this.progress = 100;
+        onProgress && onProgress(this.progress);
+        this.#lock = false;
+        return this;
     }
 
 }
