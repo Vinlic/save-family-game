@@ -16,14 +16,16 @@ const calcSlideStyle = () => {
     return {
         transform: `translateX(${-currentIndex.value * 100}%)`
     };
-}
+};
 
-setTimeout(() => {
+const switchLeft = () => {
+    currentIndex.value--;
+};
+
+const switchRight = () => {
     currentIndex.value++;
-    setTimeout(() => {
-        currentIndex.value++;
-    }, 3000);
-}, 3000);
+};
+
 </script>
 
 <template>
@@ -32,7 +34,7 @@ setTimeout(() => {
             <template v-for="slide, slideIndex in sceneList.length % 4 + 1">
                 <div class="slide" :style="calcSlideStyle()">
                     <div class="scene-group">
-                        <div v-for="index in sceneList.slice((slide - 1) * 4, (slide - 1) * 4 + 4)" class="scene-item">
+                        <div v-for="index in sceneList.slice((slide - 1) * 4, (slide - 1) * 4 + 4)" class="scene-item nes-pointer">
                             <div class="scene-info">
                                 <span>何以养老</span>
                             </div>
@@ -48,6 +50,12 @@ setTimeout(() => {
                     </div>
                 </div>
             </template>
+        </div>
+        <div v-show="currentIndex != 0" class="arrow arrow-left nes-pointer" @click="switchLeft">
+            <img src="@/assets/arrow.png" />
+        </div>
+        <div v-show="currentIndex != sceneList.length % 4" class="arrow arrow-right nes-pointer" @click="switchRight">
+            <img src="@/assets/arrow.png" />
         </div>
     </div>
 </template>
