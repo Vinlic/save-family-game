@@ -30,7 +30,7 @@
     padding: 0 80px;
     display: inline-block;
     vertical-align: top;
-    transition: all 500ms ease-in-out;
+    transition: all 500ms ease;
 }
 
 .scene-group {
@@ -51,6 +51,7 @@
 
 .scene-item:hover {
     transform: scale(1.1);
+    border: 4px #ffe32d solid;
 }
 
 .scene-info {
@@ -90,6 +91,11 @@
     margin-left: 10px;
 }
 
+.arrow {
+    opacity: 0;
+    animation: fade-in-animte 500ms ease forwards;
+}
+
 .arrow>img {
     width: 40px;
     height: 40px;
@@ -108,6 +114,15 @@
     top: 49%;
     right: 25px;
     transform: rotate(-90deg);
+}
+
+@keyframes fade-in-animte {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes background-animate {

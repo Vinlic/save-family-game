@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { ref, getCurrentInstance, onMounted } from 'vue';
+import type { Scene } from '@/interfaces/Scene';
 import Modal from '@/components/Modal.vue';
 
 const instance = getCurrentInstance();
 const bus = instance?.proxy?.$bus;
 
+const containerRef = ref<HTMLDivElement>();
 const currentIndex = ref(0);
 const sceneList = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
 onMounted(() => {
     bus?.emit('page-loaded:scene-view');
+    containerRef.value?.focus();
 });
 
 const calcSlideStyle = () => {
@@ -19,17 +22,21 @@ const calcSlideStyle = () => {
 };
 
 const switchLeft = () => {
+    if(currentIndex.value < 1)
+        return;
     currentIndex.value--;
 };
 
 const switchRight = () => {
+    if(currentIndex.value >= sceneList.value.length % 4)
+        return;
     currentIndex.value++;
 };
 
 </script>
 
 <template>
-    <div class="container">
+    <div class="container" ref="containerRef" tabindex="-1" @keyup.left="switchLeft" @keyup.right="switchRight">
         <div class="swiper">
             <template v-for="slide, slideIndex in sceneList.length % 4 + 1">
                 <div class="slide" :style="calcSlideStyle()">

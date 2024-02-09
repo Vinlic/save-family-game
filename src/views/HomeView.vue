@@ -2,6 +2,7 @@
 import { ref, getCurrentInstance, nextTick } from 'vue';
 import Modal from '@/components/Modal.vue';
 import router from '@/router';
+import loader from '@/lib/loader';
 
 const instance = getCurrentInstance();
 const bus = instance?.proxy?.$bus;
@@ -107,6 +108,9 @@ const verifyNameModal = () => {
   return _name && _name.length <= 20 && !disabledNames.includes(_name.toLowerCase());
 }
 
+loader.run()
+  .then(() => console.log(loader.images))
+  .catch(err => console.error(err));
 </script>
 
 <template>
