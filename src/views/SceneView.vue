@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, getCurrentInstance, onMounted } from 'vue';
 import Modal from '@/components/Modal.vue';
+import scenes from '@/scenes';
 import saveManager from '@/lib/save-manager';
 import loader from '@/lib/loader';
 import router from '@/router';
@@ -11,24 +12,15 @@ const bus = instance?.proxy?.$bus;
 const containerRef = ref<HTMLDivElement>();
 const currentIndex = ref(0);
 const slideSize = ref(4);
-const sceneList = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
-if(!saveManager.currentSave)
+if (!saveManager.currentSave)
     router.replace('/');
-else
-    bus?.emit('transition-mask:on');
-
-onMounted(() => {
-    resize();
-    loader.load((progress: number) => bus?.emit('transition-mask:message:change', `编织骗局中(${progress.toFixed(2)}%)...`))
-        .then(() => {
-            bus?.emit('transition-mask:off');
-            containerRef.value?.focus();
-        })
-        .catch(err => {
-            console.error(err);
-        });
-});
+else {
+    onMounted(() => {
+        resize();
+        bus?.emit('transition-mask:off');
+    });
+}    
 
 const calcSlideStyle = () => {
     return {
@@ -37,13 +29,13 @@ const calcSlideStyle = () => {
 };
 
 const switchLeft = () => {
-    if(currentIndex.value < 1)
+    if (currentIndex.value < 1)
         return;
     currentIndex.value--;
 };
 
 const switchRight = () => {
-    if(currentIndex.value >= Math.ceil(sceneList.value.length / slideSize.value) - 1)
+    if (currentIndex.value >= Math.ceil(scenes.length / slideSize.value) - 1)
         return;
     currentIndex.value++;
 };
@@ -52,11 +44,11 @@ const resize = () => {
     const windowWidth = window.innerWidth;
     currentIndex.value = 0;
     let size = 4;
-    if(windowWidth < 1200)
+    if (windowWidth < 1200)
         size = 3;
-    if(windowWidth < 1000)
+    if (windowWidth < 1000)
         size = 2;
-    if(windowWidth < 720)
+    if (windowWidth < 720)
         size = 1;
     slideSize.value = size;
 }
@@ -67,15 +59,16 @@ window.addEventListener('resize', resize);
 <template>
     <div class="container" ref="containerRef" tabindex="-1" @keyup.left="switchLeft" @keyup.right="switchRight">
         <div class="swiper">
-            <template v-for="slide, slideIndex in Math.ceil(sceneList.length / slideSize)">
+            <template v-for="slide, slideIndex in Math.ceil(scenes.length / slideSize)">
                 <div class="slide" :style="calcSlideStyle()">
                     <div class="scene-group">
-                        <div v-for="index in sceneList.slice((slide - 1) * slideSize, (slide - 1) * slideSize + slideSize)" class="scene-item nes-pointer">
+                        <div v-for="scene in scenes.slice((slide - 1) * slideSize, (slide - 1) * slideSize + slideSize)"
+                            :key="scene.id" class="scene-item nes-pointer">
                             <div class="scene-info">
-                                <span>何以养老</span>
+                                <span>{{ scene.name }}</span>
                             </div>
                             <div class="scene-image">
-                                <img src="/scene_images/a9bde1ee-8764-5fea-9e86-1d5f27d6182e_0.jpg" />
+                                <img :src="loader.getResUrl(scene.coverResId)" />
                             </div>
                             <div class="scene-star-group">
                                 <i class="nes-icon is-medium star"></i>
@@ -90,12 +83,11 @@ window.addEventListener('resize', resize);
         <div v-show="currentIndex != 0" class="arrow arrow-left nes-pointer" @click="switchLeft">
             <img src="@/assets/arrow.png" />
         </div>
-        <div v-show="currentIndex != Math.ceil(sceneList.length / slideSize) - 1" class="arrow arrow-right nes-pointer" @click="switchRight">
+        <div v-show="currentIndex != Math.ceil(scenes.length / slideSize) - 1" class="arrow arrow-right nes-pointer"
+            @click="switchRight">
             <img src="@/assets/arrow.png" />
         </div>
     </div>
 </template>
 
-<style scoped>
-@import '@/assets/styles/SceneView.less';
-</style>
+<style scoped>@import '@/assets/styles/SceneView.less';</style>

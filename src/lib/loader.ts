@@ -11,8 +11,8 @@ class Loader {
     videos: Record<string, string> = {};
     fonts: Record<string, FontFaceObserver> = {};
     queue: any[] = [];
+    loaded = false;
     #lock = false;
-    #loaded = false;
     #loadQueue: any[] = [];
 
     getResUrl(id: string) {
@@ -66,7 +66,7 @@ class Loader {
     }
 
     async load(onProgress?: Function) {
-        if(this.#loaded)
+        if(this.loaded)
             return;
         if(this.#lock) {
             const loadPromise = new Promise((resolve, reject) => this.#loadQueue.push({ resolve, reject }));
@@ -114,7 +114,7 @@ class Loader {
         await Promise.all(loadPromises)
             .then(() => this.#loadQueue.forEach(({ resolve }) => resolve(this)))
             .catch(err => this.#loadQueue.forEach(({ reject }) => reject(err)));
-        this.#loaded = true;
+        this.loaded = true;
         this.progress = 100;
         onProgress && onProgress(this.progress);
         this.#lock = false;

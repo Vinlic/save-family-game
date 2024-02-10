@@ -44,6 +44,13 @@ class SaveManager {
     return save;
   }
 
+  loadLatest() {
+    const list = this.getList();
+    list.sort((a, b) => b.createTime - a.createTime);
+    this.currentSave = list[0];
+    return list[0];
+  }
+
   save(id: string, data = {}) {
     const save = this.load(id);
     if (!save) throw new Error(`Save ${id} not found`);
