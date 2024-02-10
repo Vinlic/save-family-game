@@ -1,16 +1,21 @@
 import axios from 'axios';
+import _ from 'lodash-es';
 import resourcesMap from './resources';
 
 class Loader {
 
     progress = 0;
-    images = new Map<string, string>();
-    audios = new Map<string, string>();
-    videos = new Map<string, string>();
+    images: Record<string, string> = {};
+    audios: Record<string, string> = {};
+    videos: Record<string, string> = {};
     queue: any[] = [];
     #lock = false;
     #loaded = false;
     #loadQueue: any[] = [];
+
+    getResUrl(id: string) {
+        return _.get(this, id) || '';
+    }
 
     async loadImage(key: string, url: string, onProgress: Function, allowMIMETypes: string[] = ['image/jpeg', 'image/png', 'image/gif']) {
         const result = await axios.get(url, {
@@ -22,7 +27,7 @@ class Loader {
         const contentType: string = result.headers['content-type'] || result.headers['Content-Type'];
         if(!allowMIMETypes.includes(contentType))
             throw new Error(`Image resource content type invalid: ${contentType} not in ${JSON.stringify(allowMIMETypes)}`);
-        this.images.set(key, URL.createObjectURL(result.data));
+        this.images[key] = URL.createObjectURL(result.data);
     }
 
     async loadAudio(key: string, url: string, onProgress: Function, allowMIMETypes: string[] = ['audio/mpeg', 'audio/mp3']) {
@@ -35,7 +40,7 @@ class Loader {
         const contentType: string = result.headers['content-type'] || result.headers['Content-Type'];
         if(!allowMIMETypes.includes(contentType as string))
             throw new Error(`Audio resource content type invalid: ${contentType} not in ${JSON.stringify(allowMIMETypes)}`);
-        this.audios.set(key, URL.createObjectURL(result.data));
+        this.audios[key] = URL.createObjectURL(result.data);
     }
 
     async loadVideo(key: string, url: string, onProgress: Function, allowMIMETypes: string[] = ['video/mp4']) {
@@ -48,7 +53,7 @@ class Loader {
         const contentType: string = result.headers['content-type'] || result.headers['Content-Type'];
         if(!allowMIMETypes.includes(contentType as string))
             throw new Error(`Video resource content type invalid: ${contentType} not in ${JSON.stringify(allowMIMETypes)}`);
-        this.videos.set(key, URL.createObjectURL(result.data));
+        this.videos[key] = URL.createObjectURL(result.data);
     }
 
     async load(onProgress?: Function) {

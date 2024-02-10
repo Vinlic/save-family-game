@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { ref, getCurrentInstance, onMounted, nextTick } from 'vue';
-import Modal from '@/components/Modal.vue';
 import router from '@/router';
+import Modal from '@/components/Modal.vue';
+import Save from '@/lib/Save';
+import { scenesMap } from '@/scenes';
+import saveManager from '@/lib/save-manager';
+import loader from '@/lib/loader';
+import util from '@/lib/util';
 
 const instance = getCurrentInstance();
 const bus = instance?.proxy?.$bus;
@@ -59,12 +64,7 @@ const nameInput = ref<HTMLInputElement>();
 const name = ref('');
 const messageText = ref('');
 
-const saveList = ref([
-  {
-    name: '诈骗骗局',
-    time: '2024/02/07 12:49:56'
-  }
-]);
+const saveList = ref<Save[]>([]);
 const achievementList = ref([
   {
     name: '时间过去了？',
@@ -73,7 +73,14 @@ const achievementList = ref([
 ]);
 
 onMounted(() => {
-  bus?.emit('transition-mask:off');
+  loader.load((progress: number) => bus?.emit('transition-mask:message:change', `编织骗局中(${progress.toFixed(2)}%)...`))
+    .then(() => {
+      loadSaveList();
+      bus?.emit('transition-mask:off');
+    })
+    .catch(err => {
+      console.error(err);
+    });
 });
 
 const startGame = () => {
@@ -97,7 +104,7 @@ const showMessage = (message: string) => {
 const confirmName = () => {
   if (!verifyNameModal())
     return showMessage('名称不合法');
-  window.localStorage.setItem('username', name.value.trim());
+  saveManager.create({ username: name.value.trim() });
   bus?.emit('transition-mask:on', {
     message: '编织骗局中...',
     callback: () => router.push('scenes')
@@ -107,6 +114,10 @@ const confirmName = () => {
 const verifyNameModal = () => {
   const _name = name.value.trim();
   return _name && _name.length <= 20 && !disabledNames.includes(_name.toLowerCase());
+}
+
+const loadSaveList = () => {
+  saveList.value = saveManager.getList();
 }
 </script>
 
@@ -139,13 +150,13 @@ const verifyNameModal = () => {
     <!-- 存档模态框 -->
     <modal ref="saveModal" title="我的回忆" width="85%" max-width="600px" min-height="300px" inner-max-height="400px">
       <div v-for="row in saveList.length % 3 + 1" class="save-row">
-        <div v-for="save in saveList.slice((row - 1) * 3, (row - 1) * 3 + 3)" class="save-item">
+        <div v-for="save in saveList.slice((row - 1) * 3, (row - 1) * 3 + 3)" class="save-item nes-pointer">
           <div class="save-item-image">
-            <img src="/scene_images/0de35832-43fc-599b-9e19-cc781315ab5d_0.jpg" />
+            <img :src="loader.getResUrl(scenesMap[save.sceneId]?.coverResId)" />
           </div>
           <div class="save-item-info">
-            <span>{{ save.name }}</span>
-            <span>{{ save.time }}</span>
+            <span>{{ scenesMap[save.sceneId]?.name || '存档不可用' }}</span>
+            <span>{{ util.dateFormat(new Date(save.createTime)) }}</span>
           </div>
         </div>
       </div>
@@ -154,7 +165,7 @@ const verifyNameModal = () => {
     <!-- 成就模态框 -->
     <modal ref="achievementModal" title="我的成就" width="85%" max-width="600px" min-height="300px" inner-max-height="400px">
       <div v-for="row in achievementList.length % 3 + 1" class="achievement-row">
-        <div v-for="achievement in achievementList.slice((row - 1) * 3, (row - 1) * 3 + 3)" class="achievement-item">
+        <div v-for="achievement in achievementList.slice((row - 1) * 3, (row - 1) * 3 + 3)" class="achievement-item nes-pointer">
           <div class="achievement-item-image">
             <img src="/scene_images/0de35832-43fc-599b-9e19-cc781315ab5d_0.jpg" />
           </div>
@@ -174,4 +185,6 @@ const verifyNameModal = () => {
   </div>
 </template>
 
-<style scoped>@import '@/assets/styles/HomeView.less';</style>
+<style scoped>
+@import '@/assets/styles/HomeView.less';
+</style>
