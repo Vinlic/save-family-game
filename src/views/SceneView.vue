@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, getCurrentInstance, onMounted } from 'vue';
 import Modal from '@/components/Modal.vue';
+import saveManager from '@/lib/save-manager';
 import loader from '@/lib/loader';
 import router from '@/router';
 
@@ -12,8 +13,10 @@ const currentIndex = ref(0);
 const slideSize = ref(4);
 const sceneList = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
-// if(!localStorage.getItem('username'))
-//     router.replace('/');
+if(!saveManager.currentSave)
+    router.replace('/');
+else
+    bus?.emit('transition-mask:on');
 
 onMounted(() => {
     resize();

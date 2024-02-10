@@ -33,6 +33,9 @@ export default {
         'image_nude_chat_scam': '/scene_images/f8bcb3d0-0997-59f2-9f87-3c5190b41492_0.jpg',
         // 网贷骗局图像
         'image_online_loan_scam': '/scene_images/ff7ac2cb-37b4-5bdc-ad52-d1cf58266a06_0.jpg'
+    },
+    fonts:{
+        'font_zpix': 'zpix'
     }
 };
 

@@ -54,13 +54,14 @@
 }
 
 .submit-btn {
-    width: 80%;
-    margin: 30px auto 0 auto;
-    display: block;
+  width: 80%;
+  margin: 30px auto 0 auto;
+  display: block;
 }
 
-.nes-input, .nes-btn {
-    border-image-repeat: stretch !important;
+.nes-input,
+.nes-btn {
+  border-image-repeat: stretch !important;
 }
 
 .nes-input {
@@ -91,14 +92,23 @@
   height: 100%;
 }
 
-.save-item-info span {
+.save-item-info > span {
   font-size: 16px;
   display: block;
 }
 
-.save-item-info span:last-child {
+.save-item-info > span:last-child {
   font-size: 12px;
   letter-spacing: 0px;
+}
+
+.save-item-info > span:last-child > span {
+  max-width: 60px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: top;
 }
 
 .achievement-item {

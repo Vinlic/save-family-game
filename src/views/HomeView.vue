@@ -65,17 +65,13 @@ const name = ref('');
 const messageText = ref('');
 
 const saveList = ref<Save[]>([]);
-const achievementList = ref([
-  {
-    name: '时间过去了？',
-    time: '2024/02/07 12:49:56'
-  }
-]);
+const achievementList = ref([]);
+
+bus?.emit('transition-mask:on');
 
 onMounted(() => {
   loader.load((progress: number) => bus?.emit('transition-mask:message:change', `编织骗局中(${progress.toFixed(2)}%)...`))
     .then(() => {
-      loadSaveList();
       bus?.emit('transition-mask:off');
     })
     .catch(err => {
@@ -92,6 +88,14 @@ const continueGame = () => {
   saveModal.value?.open();
 }
 
+const loadSave = (saveId: string) => {
+  saveManager.load(saveId);
+  bus?.emit('transition-mask:on', {
+    message: '',
+    callback: () => router.push('scenes')
+  });
+}
+
 const openAchievement = () => {
   achievementModal.value?.open();
 }
@@ -106,7 +110,7 @@ const confirmName = () => {
     return showMessage('名称不合法');
   saveManager.create({ username: name.value.trim() });
   bus?.emit('transition-mask:on', {
-    message: '编织骗局中...',
+    message: '',
     callback: () => router.push('scenes')
   });
 }
@@ -118,7 +122,10 @@ const verifyNameModal = () => {
 
 const loadSaveList = () => {
   saveList.value = saveManager.getList();
+  console.log(saveList.value);
 }
+
+loadSaveList();
 </script>
 
 <template>
@@ -130,7 +137,7 @@ const loadSaveList = () => {
       </div>
       <div class="menu">
         <button type="button" class="nes-btn" @click="startGame">新的开始</button>
-        <button type="button" class="nes-btn" @click="continueGame">不忘初心</button>
+        <button type="button" class="nes-btn" @click="continueGame">继续旅程</button>
         <button type="button" class="nes-btn" @click="openAchievement">我的成就</button>
       </div>
     </div>
@@ -149,14 +156,14 @@ const loadSaveList = () => {
 
     <!-- 存档模态框 -->
     <modal ref="saveModal" title="我的回忆" width="85%" max-width="600px" min-height="300px" inner-max-height="400px">
-      <div v-for="row in saveList.length % 3 + 1" class="save-row">
-        <div v-for="save in saveList.slice((row - 1) * 3, (row - 1) * 3 + 3)" class="save-item nes-pointer">
+      <div v-for="row in Math.ceil(saveList.length / 3)" :key="row" class="save-row">
+        <div v-for="save in saveList.slice((row - 1) * 3, (row - 1) * 3 + 3)" :key="save.id" class="save-item nes-pointer" @click="loadSave(save.id)">
           <div class="save-item-image">
             <img :src="loader.getResUrl(scenesMap[save.sceneId]?.coverResId)" />
           </div>
           <div class="save-item-info">
             <span>{{ scenesMap[save.sceneId]?.name || '存档不可用' }}</span>
-            <span>{{ util.dateFormat(new Date(save.createTime)) }}</span>
+            <span><span>{{save.username}}</span> {{ util.dateFormat(new Date(save.createTime)) }}</span>
           </div>
         </div>
       </div>
@@ -164,14 +171,14 @@ const loadSaveList = () => {
 
     <!-- 成就模态框 -->
     <modal ref="achievementModal" title="我的成就" width="85%" max-width="600px" min-height="300px" inner-max-height="400px">
-      <div v-for="row in achievementList.length % 3 + 1" class="achievement-row">
+      <div v-for="row in Math.ceil(saveList.length / 3)" class="achievement-row">
         <div v-for="achievement in achievementList.slice((row - 1) * 3, (row - 1) * 3 + 3)" class="achievement-item nes-pointer">
           <div class="achievement-item-image">
             <img src="/scene_images/0de35832-43fc-599b-9e19-cc781315ab5d_0.jpg" />
           </div>
           <div class="achievement-item-info">
-            <span>{{ achievement.name }}</span>
-            <span>{{ achievement.time }}</span>
+            <!-- <span>{{ achievement.name }}</span>
+            <span>{{ achievement.time }}</span> -->
           </div>
         </div>
       </div>

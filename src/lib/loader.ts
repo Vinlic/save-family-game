@@ -1,5 +1,6 @@
 import axios from 'axios';
 import _ from 'lodash-es';
+import FontFaceObserver from 'fontfaceobserver';
 import resourcesMap from './resources';
 
 class Loader {
@@ -8,6 +9,7 @@ class Loader {
     images: Record<string, string> = {};
     audios: Record<string, string> = {};
     videos: Record<string, string> = {};
+    fonts: Record<string, FontFaceObserver> = {};
     queue: any[] = [];
     #lock = false;
     #loaded = false;
@@ -15,6 +17,13 @@ class Loader {
 
     getResUrl(id: string) {
         return _.get(this, id) || '';
+    }
+
+    async loadFont(key: string, family: string, onProgress: Function, allowMIMETypes: string[] = ['font/woff2']) {
+        const font = new FontFaceObserver(family);
+        await font.load(undefined, 30000);
+        onProgress && onProgress(100);
+        this.fonts[key] = font;
     }
 
     async loadImage(key: string, url: string, onProgress: Function, allowMIMETypes: string[] = ['image/jpeg', 'image/png', 'image/gif']) {
@@ -72,6 +81,9 @@ class Loader {
                     let lastProgress = 0;
                     let loadFn;
                     switch(_type) {
+                        case 'fonts':
+                            loadFn = this.loadFont.bind(this);
+                        break;
                         case 'images':
                             loadFn = this.loadImage.bind(this);
                         break;
@@ -90,8 +102,8 @@ class Loader {
                         const currentProgress = progress * (singleProgress / 100);
                         this.progress += currentProgress - lastProgress;
                         lastProgress = currentProgress;
+                        onProgress && onProgress(this.progress);
                     });
-                    onProgress && onProgress(this.progress);
                 });
             }
         }

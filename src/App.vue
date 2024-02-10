@@ -8,7 +8,7 @@ const bus = instance?.proxy?.$bus;
 
 const transitionMask = ref<InstanceType<typeof TransitionMask>>();
 
-bus?.on('transition-mask:on', (callback?: any) => transitionMask.value?.open(callback));
+bus?.on('transition-mask:on', (options?: any) => transitionMask.value?.open(options));
 bus?.on('transition-mask:off', () => transitionMask.value?.close());
 bus?.on('transition-mask:message:change', (message?: any) => transitionMask.value?.changeMessage(message));
 </script>

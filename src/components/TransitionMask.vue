@@ -1,29 +1,38 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import _ from 'lodash-es';
 
 const overrideMessage = ref<string>();
 
 defineProps<{
   message?: string
-}>()
+}>();
 
+let inited = false;
 const show = ref(true);
-const hide = ref(false);
+const opening = ref(false);
+const closeing = ref(false);
 const animationEnd = ref<any>(() => { });
 
-const open = ({ message, callback }: { message?: string, callback?: Function }) => {
-  show.value = true;
-  if(message)
+const open = ({ message, callback }: { message?: string, callback?: Function } = {}) => {
+  if(_.isString(message))
     overrideMessage.value = message;
-  if(callback)
-    animationEnd.value = callback;
+  show.value = true;
+  if(inited)
+    opening.value = true;
+  else
+    inited = true;
+  animationEnd.value = () => {
+    callback && callback();
+    opening.value = false;
+  }
 }
 
 const close = () => {
-  hide.value = true;
+  closeing.value = true;
   animationEnd.value = (() => {
     animationEnd.value = () => { };
-    hide.value = false;
+    closeing.value = false;
     show.value = false;
   });
 }
@@ -40,9 +49,9 @@ defineExpose({
 </script>
 
 <template>
-  <div v-show="show" :class="'transition-mask' + (hide ? ' transition-mask-closing' : '')" @animationend="animationEnd">
-    <div v-if="overrideMessage || message">
-      <span>{{ overrideMessage || message }}</span>
+  <div v-show="show" :class="'transition-mask' + (opening ? ' transition-mask-opening' : '') + (closeing ? ' transition-mask-closing' : '')" @animationend="animationEnd">
+    <div>
+      <span>{{ _.isString(overrideMessage) ? overrideMessage : message }}</span>
     </div>
   </div>
 </template>
@@ -56,10 +65,13 @@ defineExpose({
   left: 0;
   background: #000;
   z-index: 999;
-  animation: show-animate 500ms linear;
   justify-content: center;
   align-items: center;
   display: flex;
+}
+
+.transition-mask-opening {
+  animation: show-animate 500ms linear;
 }
 
 .transition-mask-closing {

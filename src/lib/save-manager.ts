@@ -9,7 +9,7 @@ interface SaveCreateOptions {
 
 class SaveManager {
 
-  #cache: Record<string, Save> = {};
+  currentSave: Save | null = null;
 
   create(options: SaveCreateOptions) {
     const id = `save-${Date.now()}`;
@@ -19,8 +19,8 @@ class SaveManager {
         sceneId: scene.id,
         ...options
     });
-    this.#cache[id] = save;
     window.localStorage.setItem(id, JSON.stringify(save));
+    this.currentSave = save;
     return save;
   }
 
@@ -36,12 +36,11 @@ class SaveManager {
   }
 
   load(id: string) {
-    if (this.#cache[id]) return this.#cache[id];
     const raw = window.localStorage.getItem(id);
     if (!raw) return null;
     const data = JSON.parse(raw);
     const save = new Save(data);
-    this.#cache[id] = save;
+    this.currentSave = save;
     return save;
   }
 
@@ -50,7 +49,6 @@ class SaveManager {
     if (!save) throw new Error(`Save ${id} not found`);
     _.merge(save, _.cloneDeep(data));
     save.updateTime = util.timestamp();
-    this.#cache[id] = save;
     window.localStorage.setItem(id, JSON.stringify(save));
     return save;
   }
