@@ -5,7 +5,7 @@ class PhoneManipulationScam extends Scene {
     constructor() {
         super({
             id: 'phone-manipulation-scam',
-            name: '电话操控骗局',
+            name: '提线木偶',
             coverResId: 'images.image_phone_manipulation_scam' 
         });
     }

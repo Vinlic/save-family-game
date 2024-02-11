@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { nextTick } from 'vue';
 import { ref } from 'vue';
 
-let lock = false;
 let timer: number;
 const message = ref<string>('');
 const show = ref(false);
@@ -14,7 +14,6 @@ const _show = (_message: string, duration: number = 2000) => {
   if(showing.value)
     showing.value = false;
   show.value = true;
-  showing.value = true;
   animationEnd.value = () => {
     showing.value = false;
     clearTimeout(timer);
@@ -28,6 +27,7 @@ const _show = (_message: string, duration: number = 2000) => {
       hiding.value = true;
     }, duration);
   };
+  showing.value = true;
 }
 
 defineExpose({

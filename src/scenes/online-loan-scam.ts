@@ -5,7 +5,7 @@ class OnlineLoanScam extends Scene {
     constructor() {
         super({
             id: 'online-loan-scam',
-            name: '网贷骗局',
+            name: '被套路贷包围了',
             coverResId: 'images.image_online_loan_scam' 
         });
     }

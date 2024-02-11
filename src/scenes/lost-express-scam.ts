@@ -5,7 +5,7 @@ class LostExpressScam extends Scene {
     constructor() {
         super({
             id: 'lost-express-scam',
-            name: '快递遗失骗局',
+            name: '我快递丢了？',
             coverResId: 'images.image_lost_express_scam' 
         });
     }

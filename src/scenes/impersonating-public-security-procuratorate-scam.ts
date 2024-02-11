@@ -5,7 +5,7 @@ class ImpersonatingPublicSecurityProcuratorateScam extends Scene {
     constructor() {
         super({
             id: 'image_impersonating_public_security_procuratorate_scam',
-            name: '冒充公检法骗局',
+            name: '喂？我是警察',
             coverResId: 'images.image_impersonating_public_security_procuratorate_scam' 
         });
     }

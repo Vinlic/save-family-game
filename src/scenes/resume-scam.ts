@@ -5,7 +5,7 @@ class ResumeScam extends Scene {
     constructor() {
         super({
             id: 'resume-scam',
-            name: '招聘骗局',
+            name: '恶魔的招聘',
             coverResId: 'images.image_resume_scam' 
         });
     }

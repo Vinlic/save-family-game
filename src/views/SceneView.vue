@@ -97,13 +97,13 @@ window.addEventListener('resize', resize);
 <template>
     <div class="container" ref="containerRef" tabindex="-1" @keyup.left="switchLeft" @keyup.right="switchRight">
         <div class="swiper">
-            <template v-for="slide, slideIndex in Math.ceil(scenes.length / slideSize)">
+            <template v-for="slide in Math.ceil(scenes.length / slideSize)">
                 <div class="slide" :style="calcSlideStyle()">
                     <div class="scene-group">
                         <div v-for="scene in scenes.slice((slide - 1) * slideSize, (slide - 1) * slideSize + slideSize)"
                             :key="scene.id" class="scene-item nes-pointer" @click="currentSave.scenesResultMap[scene.id] ? openScene() : showLockTip()">
                             <div class="scene-info">
-                                <span>{{ scene.name }}</span>
+                                <span>{{ currentSave.scenesResultMap[scene.id] ? scene.name : '？？？' }}</span>
                             </div>
                             <div v-if="!currentSave.scenesResultMap[scene.id]" class="scene-lock">
                                 <img src="@/assets/images/lock.png" />

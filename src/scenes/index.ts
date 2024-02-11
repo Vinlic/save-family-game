@@ -14,6 +14,7 @@ import mlmScam from "./mlm-scam";
 import aiVtuberScam from "./ai-vtuber-scam";
 import pensionProductScam from "./pension-product-scam";
 import healthProductScam from "./health-product-scam";
+import witchScam from "./witch-scam";
 
 const scenes = [
 
@@ -60,7 +61,10 @@ const scenes = [
     pensionProductScam,
 
     // 保健品骗局
-    healthProductScam
+    healthProductScam,
+
+    // 神婆骗局
+    witchScam
 
 
 ] as Scene[];
