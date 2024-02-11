@@ -4,10 +4,10 @@ import saveManager from '@/lib/save-manager';
 export default {
     beforeRouteEnter(to: any, from: any, next) {
         if (!saveManager.currentSave)
-            next('/');
-        else
-            next();
-    }
+        next('/');
+    else
+    next();
+}
 }
 </script>
 <script setup lang="ts">
@@ -19,10 +19,10 @@ import loader from '@/lib/loader';
 const instance = getCurrentInstance();
 const bus = instance?.proxy?.$bus;
 
-const currentSave = saveManager.currentSave as Save;
 const containerRef = ref<HTMLDivElement>();
 const currentIndex = ref(0);
 const slideSize = ref(4);
+const currentSave = saveManager.currentSave as Save;
 
 onMounted(() => {
     resize();
@@ -49,11 +49,11 @@ const switchRight = () => {
 };
 
 const openScene = () => {
-    
+
 }
 
 const showLockTip = () => {
-    
+    bus?.emit('message-box:show', ['场景还未解锁']);
 }
 
 const resize = () => {
@@ -101,7 +101,7 @@ window.addEventListener('resize', resize);
                 <div class="slide" :style="calcSlideStyle()">
                     <div class="scene-group">
                         <div v-for="scene in scenes.slice((slide - 1) * slideSize, (slide - 1) * slideSize + slideSize)"
-                            :key="scene.id" class="scene-item nes-pointer" @click="currentSave.scenesResultMap[scene.id] ? openScene : showLockTip">
+                            :key="scene.id" class="scene-item nes-pointer" @click="currentSave.scenesResultMap[scene.id] ? openScene() : showLockTip()">
                             <div class="scene-info">
                                 <span>{{ scene.name }}</span>
                             </div>

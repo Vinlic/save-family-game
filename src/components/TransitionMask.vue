@@ -14,7 +14,7 @@ const opening = ref(false);
 const closeing = ref(false);
 const animationEnd = ref<any>(() => { });
 
-const open = ({ message, callback }: { message?: string, callback?: Function } = {}) => {
+const open = (message?: string, callback?: Function) => {
   if(_.isString(message))
     overrideMessage.value = message;
   show.value = true;
@@ -83,6 +83,7 @@ defineExpose({
   font-size: 20px;
   letter-spacing: 8px;
   text-align: center;
+  user-select: none;
 }
 
 .transition-mask>div>i {

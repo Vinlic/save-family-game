@@ -70,7 +70,7 @@ const achievementList = ref([]);
 bus?.emit('transition-mask:on');
 
 onMounted(() => {
-  loader.load((progress: number) => bus?.emit('transition-mask:message:change', `编织骗局中(${progress.toFixed(2)}%)...`))
+  loader.load((progress: number) => bus?.emit('transition-mask:message:change', [`编织骗局中(${progress.toFixed(2)}%)...`]))
     .then(() => {
       bus?.emit('transition-mask:off');
     })
@@ -90,10 +90,7 @@ const continueGame = () => {
 
 const loadSave = (saveId: string) => {
   saveManager.load(saveId);
-  bus?.emit('transition-mask:on', {
-    message: '编织骗局中...',
-    callback: () => router.push('scenes')
-  });
+  bus?.emit('transition-mask:on', ['编织骗局中...', () => router.push('scenes')]);
 }
 
 const openAchievement = () => {
@@ -109,10 +106,7 @@ const confirmName = () => {
   if (!verifyNameModal())
     return showMessage('名称不合法');
   saveManager.create({ username: name.value.trim() });
-  bus?.emit('transition-mask:on', {
-    message: '编织骗局中...',
-    callback: () => router.push('scenes')
-  });
+  bus?.emit('transition-mask:on', ['编织骗局中...', () => router.push('scenes')]);
 }
 
 const verifyNameModal = () => {
@@ -122,7 +116,6 @@ const verifyNameModal = () => {
 
 const loadSaveList = () => {
   saveList.value = saveManager.getList();
-  console.log(saveList.value);
 }
 
 loadSaveList();
