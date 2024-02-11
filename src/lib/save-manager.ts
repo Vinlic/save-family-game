@@ -1,6 +1,7 @@
 import _ from "lodash-es";
 import scenes from '@/scenes';
 import Save from "./Save";
+import SceneResult from "./SceneResult";
 import util from "./util";
 
 interface SaveCreateOptions {
@@ -16,7 +17,8 @@ class SaveManager {
     const scene = scenes[0];
     const save = new Save({
         id,
-        sceneId: scene.id,
+        currentSceneId: scene.id,
+        scenesResultMap: { [scene.id]: new SceneResult() },
         ...options
     });
     window.localStorage.setItem(id, JSON.stringify(save));

@@ -6,7 +6,7 @@ class InternetDatingScam extends Scene {
         super({
             id: 'online-shopping-scam',
             name: '网络交友骗局',
-            coverResId: 'images.image_online_shopping_scam' 
+            coverResId: 'images.image_internet_dating_scam' 
         });
     }
 

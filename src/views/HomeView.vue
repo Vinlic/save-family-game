@@ -91,7 +91,7 @@ const continueGame = () => {
 const loadSave = (saveId: string) => {
   saveManager.load(saveId);
   bus?.emit('transition-mask:on', {
-    message: '',
+    message: '编织骗局中...',
     callback: () => router.push('scenes')
   });
 }
@@ -110,7 +110,7 @@ const confirmName = () => {
     return showMessage('名称不合法');
   saveManager.create({ username: name.value.trim() });
   bus?.emit('transition-mask:on', {
-    message: '',
+    message: '编织骗局中...',
     callback: () => router.push('scenes')
   });
 }
@@ -159,10 +159,10 @@ loadSaveList();
       <div v-for="row in Math.ceil(saveList.length / 3)" :key="row" class="save-row">
         <div v-for="save in saveList.slice((row - 1) * 3, (row - 1) * 3 + 3)" :key="save.id" class="save-item nes-pointer" @click="loadSave(save.id)">
           <div class="save-item-image">
-            <img :src="loader.getResUrl(scenesMap[save.sceneId]?.coverResId)" />
+            <img :src="loader.getResUrl(scenesMap[save.currentSceneId]?.coverResId)" />
           </div>
           <div class="save-item-info">
-            <span>{{ scenesMap[save.sceneId]?.name || '存档不可用' }}</span>
+            <span>{{ scenesMap[save.currentSceneId]?.name || '存档不可用' }}</span>
             <span><span>{{save.username}}</span> {{ util.dateFormat(new Date(save.createTime)) }}</span>
           </div>
         </div>

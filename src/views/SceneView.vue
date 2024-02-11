@@ -1,26 +1,34 @@
+<script lang="ts">
+import saveManager from '@/lib/save-manager';
+
+export default {
+    beforeRouteEnter(to: any, from: any, next) {
+        if (!saveManager.currentSave)
+            next('/');
+        else
+            next();
+    }
+}
+</script>
 <script setup lang="ts">
 import { ref, getCurrentInstance, onMounted } from 'vue';
-import Modal from '@/components/Modal.vue';
+import Save from '@/lib/Save';
 import scenes from '@/scenes';
-import saveManager from '@/lib/save-manager';
 import loader from '@/lib/loader';
-import router from '@/router';
 
 const instance = getCurrentInstance();
 const bus = instance?.proxy?.$bus;
 
+const currentSave = saveManager.currentSave as Save;
 const containerRef = ref<HTMLDivElement>();
 const currentIndex = ref(0);
 const slideSize = ref(4);
 
-if (!saveManager.currentSave)
-    router.replace('/');
-else {
-    onMounted(() => {
-        resize();
-        bus?.emit('transition-mask:off');
-    });
-}    
+onMounted(() => {
+    resize();
+    bus?.emit('transition-mask:off');
+    containerRef.value?.focus();
+});
 
 const calcSlideStyle = () => {
     return {
@@ -40,6 +48,14 @@ const switchRight = () => {
     currentIndex.value++;
 };
 
+const openScene = () => {
+    
+}
+
+const showLockTip = () => {
+    
+}
+
 const resize = () => {
     const windowWidth = window.innerWidth;
     currentIndex.value = 0;
@@ -53,6 +69,28 @@ const resize = () => {
     slideSize.value = size;
 }
 
+const getScoreStyleClass = (score: number = 0, index: number, p: any) => {
+    switch (index) {
+        case 0:
+            if (score < 16.66)
+                return ' is-transparent';
+            if (score < 33.33)
+                return ' is-half';
+            return '';
+        case 1:
+            if (score < 50)
+                return ' is-transparent';
+            if (score < 66.66)
+                return ' is-half';
+            return '';
+        case 2:
+            if (score < 83.33)
+                return ' is-transparent';
+            if (score < 100)
+                return ' is-half';
+    }
+};
+
 window.addEventListener('resize', resize);
 </script>
 
@@ -63,17 +101,19 @@ window.addEventListener('resize', resize);
                 <div class="slide" :style="calcSlideStyle()">
                     <div class="scene-group">
                         <div v-for="scene in scenes.slice((slide - 1) * slideSize, (slide - 1) * slideSize + slideSize)"
-                            :key="scene.id" class="scene-item nes-pointer">
+                            :key="scene.id" class="scene-item nes-pointer" @click="currentSave.scenesResultMap[scene.id] ? openScene : showLockTip">
                             <div class="scene-info">
                                 <span>{{ scene.name }}</span>
+                            </div>
+                            <div v-if="!currentSave.scenesResultMap[scene.id]" class="scene-lock">
+                                <img src="@/assets/images/lock.png" />
                             </div>
                             <div class="scene-image">
                                 <img :src="loader.getResUrl(scene.coverResId)" />
                             </div>
                             <div class="scene-star-group">
-                                <i class="nes-icon is-medium star"></i>
-                                <i class="nes-icon is-medium star"></i>
-                                <i class="nes-icon is-medium star"></i>
+                                <i v-for="num in 3"
+                                    :class="'nes-icon is-medium star' + getScoreStyleClass(currentSave.scenesResultMap[scene.id] ? currentSave.scenesResultMap[scene.id].score : 0, num - 1, currentSave.scenesResultMap[scene.id])"></i>
                             </div>
                         </div>
                     </div>
@@ -81,13 +121,15 @@ window.addEventListener('resize', resize);
             </template>
         </div>
         <div v-show="currentIndex != 0" class="arrow arrow-left nes-pointer" @click="switchLeft">
-            <img src="@/assets/arrow.png" />
+            <img src="@/assets/images/arrow.png" />
         </div>
         <div v-show="currentIndex != Math.ceil(scenes.length / slideSize) - 1" class="arrow arrow-right nes-pointer"
             @click="switchRight">
-            <img src="@/assets/arrow.png" />
+            <img src="@/assets/images/arrow.png" />
         </div>
     </div>
 </template>
 
-<style scoped>@import '@/assets/styles/SceneView.less';</style>
+<style scoped>
+@import '@/assets/styles/SceneView.less';
+</style>

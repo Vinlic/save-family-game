@@ -37,6 +37,7 @@ export default {
         'image_health_product_scam': '/scene_images/09947ed8-6145-552b-87d9-573399fa1555_0.jpg'
     },
     fonts:{
+        // 像素字体
         'font_zpix': 'zpix'
     }
 };
