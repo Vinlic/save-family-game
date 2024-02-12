@@ -90,7 +90,7 @@ const continueGame = () => {
 
 const loadSave = (saveId: string) => {
   saveManager.load(saveId);
-  bus?.emit('transition-mask:on', ['编织骗局中...', () => router.push('scenes')]);
+  bus?.emit('transition-mask:on', ['编织骗局中...', () => router.push('scene-list')]);
 }
 
 const openAchievement = () => {
@@ -106,7 +106,7 @@ const confirmName = () => {
   if (!verifyNameModal())
     return showMessage('名称不合法');
   saveManager.create({ username: name.value.trim() });
-  bus?.emit('transition-mask:on', ['编织骗局中...', () => router.push('scenes')]);
+  bus?.emit('transition-mask:on', ['编织骗局中...', () => router.push('scene-list')]);
 }
 
 const verifyNameModal = () => {
