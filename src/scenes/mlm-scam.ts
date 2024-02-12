@@ -6,7 +6,7 @@ class MLMScam extends Scene {
         super({
             id: 'mlm-scam',
             name: '我和我的下线',
-            coverResId: 'images.image_mlm_scam' 
+            coverResId: 'images.scene_mlm_scam' 
         });
     }
 

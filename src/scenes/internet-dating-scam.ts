@@ -6,7 +6,7 @@ class InternetDatingScam extends Scene {
         super({
             id: 'online-shopping-scam',
             name: '你爱上了我？',
-            coverResId: 'images.image_internet_dating_scam' 
+            coverResId: 'images.scene_internet_dating_scam' 
         });
     }
 

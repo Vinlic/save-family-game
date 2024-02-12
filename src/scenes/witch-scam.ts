@@ -6,7 +6,7 @@ class WitchScam extends Scene {
         super({
             id: 'witch-scam',
             name: '心里有鬼',
-            coverResId: 'images.image_witch_scam' 
+            coverResId: 'images.scene_witch_scam' 
         });
     }
 

@@ -1,14 +1,15 @@
 <script lang="ts">
+import { scenesMap } from '@/scenes';
 import saveManager from '@/lib/save-manager';
 
-// export default {
-//   beforeRouteEnter(to: any, from: any, next) {
-//     if (!saveManager.currentSave)
-//       next('/');
-//     else
-//       next();
-//   }
-// }
+export default {
+  beforeRouteEnter(to: any, from: any, next) {
+    if (!saveManager.currentSave)
+      next('/');
+    else
+      next();
+  }
+}
 </script>
 <script setup lang="ts">
 import { ref, getCurrentInstance, onMounted } from 'vue';
@@ -28,14 +29,14 @@ onMounted(() => {
 });
 
 const inputText = (e: Event) => {
-  if(!textareaRef.value || textareaRef.value?.scrollHeight <= 60)
+  if (!textareaRef.value || textareaRef.value?.scrollHeight <= 54)
     return;
-  textareaRef.value.style.height = '60px';
-  if(textareaRef.value?.scrollHeight > 300)
+  textareaRef.value.style.height = '54px';
+  if (textareaRef.value?.scrollHeight > 300)
     textareaRef.value.style.overflowY = 'auto';
   else
     textareaRef.value.style.overflowY = 'hidden';
-  textareaRef.value.style.height = `${textareaRef.value?.scrollHeight + 8}px`;
+  textareaRef.value.style.height = `${textareaRef.value?.scrollHeight + 3}px`;
 };
 
 </script>
@@ -43,11 +44,37 @@ const inputText = (e: Event) => {
 <template>
   <div class="container" ref="containerRef" tabindex="-1">
     <div class="message-list">
-      
+      <div style="height:1px"></div>
+      <div class="event-item">
+        <div class="event-item-image">
+          <img :src="loader.getResUrl(scenesMap[currentSave.currentSceneId]?.coverResId)" />
+        </div>
+        <div class="event-item-content">
+          <span>{{ scenesMap[currentSave.currentSceneId]?.name }}</span>
+          <span>一个</span>
+        </div>
+      </div>
+      <div class="message-item message-item-left">
+        <div class="message-avatar">
+          <img :src="loader.getResUrl('images.avatar_1')" />
+        </div>
+        <div class="message-content message-content-left">
+          <span>您哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</span>
+        </div>
+      </div>
+      <div class="message-item message-item-right">
+        <div class="message-content message-content-right">
+          <span>您哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</span>
+        </div>
+        <div class="message-avatar">
+          <img :src="loader.getResUrl('images.avatar_1')" />
+        </div>
+      </div>
+      <div class="bottom-block"></div>
     </div>
     <div class="message-input-container">
       <textarea ref="textareaRef" class="textarea" placeholder="说点什么..." @input="inputText"></textarea>
-      <div class="send-button-container">
+      <div class="send-button-container nes-pointer">
         <img src="@/assets/images/send.png" />
       </div>
     </div>

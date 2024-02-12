@@ -6,7 +6,7 @@ class PhoneManipulationScam extends Scene {
         super({
             id: 'phone-manipulation-scam',
             name: '提线木偶',
-            coverResId: 'images.image_phone_manipulation_scam' 
+            coverResId: 'images.scene_phone_manipulation_scam' 
         });
     }
 

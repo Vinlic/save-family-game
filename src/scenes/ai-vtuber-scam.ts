@@ -6,7 +6,7 @@ class AIVtuberScam extends Scene {
         super({
             id: 'ai-vtuber-scam',
             name: '数字人骗局',
-            coverResId: 'images.image_ai_vtuber_scam' 
+            coverResId: 'images.scene_ai_vtuber_scam' 
         });
     }
 

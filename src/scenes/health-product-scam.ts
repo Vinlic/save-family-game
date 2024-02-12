@@ -6,7 +6,7 @@ class HealthProductScam extends Scene {
         super({
             id: 'health-product-scam',
             name: '包治百病',
-            coverResId: 'images.image_health_product_scam' 
+            coverResId: 'images.scene_health_product_scam' 
         });
     }
 

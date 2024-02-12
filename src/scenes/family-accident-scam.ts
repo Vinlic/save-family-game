@@ -6,7 +6,7 @@ class FamilyAccidentScam extends Scene {
         super({
             id: 'family-accident-scam',
             name: '妈！我出车祸了',
-            coverResId: 'images.image_family_accident_scam' 
+            coverResId: 'images.scene_family_accident_scam' 
         });
     }
 

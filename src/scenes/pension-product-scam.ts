@@ -6,7 +6,7 @@ class PensionProductScam extends Scene {
         super({
             id: 'pension-product-scam',
             name: '何以养老',
-            coverResId: 'images.image_pension_product_scam' 
+            coverResId: 'images.scene_pension_product_scam' 
         });
     }
 

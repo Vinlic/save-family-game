@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import _ from 'lodash-es';
 
 const overrideMessage = ref<string>();
@@ -9,9 +9,9 @@ defineProps<{
 }>();
 
 let inited = false;
-const show = ref(true);
+const show = ref(false);
 const opening = ref(false);
-const closeing = ref(false);
+const closing = ref(false);
 const animationEnd = ref<any>(() => { });
 
 const open = (message?: string, callback?: Function) => {
@@ -29,10 +29,12 @@ const open = (message?: string, callback?: Function) => {
 }
 
 const close = () => {
-  closeing.value = true;
+  if(!show.value)
+    return;
+  closing.value = true;
   animationEnd.value = (() => {
     animationEnd.value = () => { };
-    closeing.value = false;
+    closing.value = false;
     show.value = false;
   });
 }
@@ -49,7 +51,7 @@ defineExpose({
 </script>
 
 <template>
-  <div v-show="show" :class="'transition-mask' + (opening ? ' transition-mask-opening' : '') + (closeing ? ' transition-mask-closing' : '')" @animationend="animationEnd">
+  <div v-show="show" :class="'transition-mask' + (opening ? ' transition-mask-opening' : '') + (closing ? ' transition-mask-closing' : '')" @animationend="animationEnd">
     <div>
       <span>{{ _.isString(overrideMessage) ? overrideMessage : message }}</span>
     </div>

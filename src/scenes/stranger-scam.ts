@@ -6,7 +6,7 @@ class StrangerScam extends Scene {
         super({
             id: 'stranger-scam',
             name: '奇怪的陌生人',
-            coverResId: 'images.image_stranger_scam' 
+            coverResId: 'images.scene_stranger_scam' 
         });
     }
 

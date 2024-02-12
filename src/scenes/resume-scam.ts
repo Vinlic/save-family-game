@@ -6,7 +6,7 @@ class ResumeScam extends Scene {
         super({
             id: 'resume-scam',
             name: '恶魔的招聘',
-            coverResId: 'images.image_resume_scam' 
+            coverResId: 'images.scene_resume_scam' 
         });
     }
 
