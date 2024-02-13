@@ -90,6 +90,9 @@ const continueGame = () => {
 
 const loadSave = (saveId: string) => {
   saveManager.load(saveId);
+  const currentSave = saveManager.currentSave;
+  if(!currentSave)
+    return;
   bus?.emit('transition-mask:on', ['编织骗局中...', () => router.push('scene-list')]);
 }
 

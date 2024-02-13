@@ -1,5 +1,6 @@
 <script lang="ts">
 import saveManager from '@/lib/save-manager';
+import { nextTick } from 'vue';
 
 export default {
     beforeRouteEnter(to: any, from: any, next) {
@@ -29,6 +30,12 @@ onMounted(() => {
     resize();
     bus?.emit('transition-mask:off');
     containerRef.value?.focus();
+    const sceneIndex = scenes.findIndex(scene => scene.id == currentSave.currentSceneId);
+    if(sceneIndex == -1)
+        return;
+    setTimeout(() => {
+        currentIndex.value = Math.floor(sceneIndex / slideSize.value);
+    }, 500);
 });
 
 const calcSlideStyle = () => {
@@ -49,7 +56,9 @@ const switchRight = () => {
     currentIndex.value++;
 };
 
-const openScene = () => {
+const openScene = (sceneId: string) => {
+    currentSave.currentSceneId = sceneId;
+    saveManager.save(currentSave.id, currentSave);
     bus?.emit('transition-mask:on', ['开启骗局中...', () => router.push('scene')]);
 }
 
@@ -103,7 +112,7 @@ window.addEventListener('resize', resize);
                     <div class="scene-group">
                         <div v-for="scene in scenes.slice((slide - 1) * slideSize, (slide - 1) * slideSize + slideSize)"
                             :key="scene.id" class="scene-item nes-pointer"
-                            @click="currentSave.scenesResultMap[scene.id] ? openScene() : showLockTip()">
+                            @click="currentSave.scenesResultMap[scene.id] ? openScene(scene.id) : showLockTip()">
                             <div class="scene-info">
                                 <span>{{ currentSave.scenesResultMap[scene.id] ? scene.name : '？？？' }}</span>
                             </div>

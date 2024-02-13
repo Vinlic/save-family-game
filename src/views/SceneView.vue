@@ -59,13 +59,19 @@ const inputText = (e: Event) => {
         <div class="message-avatar">
           <img :src="loader.getResUrl('images.avatar_1')" />
         </div>
-        <div class="message-content message-content-left">
-          <span>您哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</span>
+        <div>
+          <span class="message-name message-name-left">奶奶</span>
+          <div class="message-content message-content-left">
+            <span>您哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</span>
+          </div>
         </div>
       </div>
       <div class="message-item message-item-right">
-        <div class="message-content message-content-right">
-          <span>您哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</span>
+        <div>
+          <span class="message-name message-name-right">我</span>
+          <div class="message-content message-content-right">
+            <span>您哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</span>
+          </div>
         </div>
         <div class="message-avatar">
           <img :src="loader.getResUrl('images.avatar_1')" />
