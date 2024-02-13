@@ -1,5 +1,5 @@
 import Scene from "@/lib/Scene";
-import strangerScam from "./stranger-scam";
+import giftRedemptionScam from "./gift-redemption-scam";
 import resumeScam from "./resume-scam";
 import teaPickingGirlScam from "./tea-picking-girl-scam";
 import onlineShoppingScam from "./online-shopping-scam";
@@ -18,8 +18,8 @@ import witchScam from "./witch-scam";
 
 const scenes = [
 
-    // 陌生人骗局
-    strangerScam,
+    // 礼品兑换骗局
+    giftRedemptionScam,
 
     // 招聘骗局
     resumeScam,

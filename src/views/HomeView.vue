@@ -119,10 +119,12 @@ const loadSaveList = () => {
 }
 
 loadSaveList();
+
+const requestFullscreen = () => document.getElementById('app')?.requestFullscreen();
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" @click="requestFullscreen">
     <div class="center-group">
       <div class="title">
         <span class="tip">[内测版]</span>

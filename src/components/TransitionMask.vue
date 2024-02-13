@@ -8,6 +8,7 @@ defineProps<{
   message?: string
 }>();
 
+let timer: number;
 let inited = false;
 const show = ref(false);
 const opening = ref(false);
@@ -22,21 +23,30 @@ const open = (message?: string, callback?: Function) => {
     opening.value = true;
   else
     inited = true;
-  animationEnd.value = () => {
+  clearTimeout(timer);
+  timer = setTimeout(() => {
     callback && callback();
     opening.value = false;
-  }
+  }, 490);
+  // animationEnd.value = () => {
+  //   callback && callback();
+  //   opening.value = false;
+  // }
 }
 
 const close = () => {
   if(!show.value)
     return;
   closing.value = true;
-  animationEnd.value = (() => {
-    animationEnd.value = () => { };
+  clearTimeout(timer);
+  timer = setTimeout(() => {
     closing.value = false;
     show.value = false;
-  });
+  }, 490);
+  // animationEnd.value = (() => {
+  //   closing.value = false;
+  //   show.value = false;
+  // });
 }
 
 const changeMessage = (message: string) => {

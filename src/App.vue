@@ -3,6 +3,7 @@ import { ref, getCurrentInstance } from 'vue';
 import TransitionMask from '@/components/TransitionMask.vue';
 import MessageBox from './components/MessageBox.vue';
 import { RouterLink, RouterView } from 'vue-router'
+import { onMounted } from 'vue';
 
 const instance = getCurrentInstance();
 const bus = instance?.proxy?.$bus;
@@ -14,10 +15,11 @@ bus?.on('transition-mask:on', ([message, callback]: any = []) => transitionMaskR
 bus?.on('transition-mask:off', () => transitionMaskRef.value?.close());
 bus?.on('transition-mask:message:change', ([message]: any = []) => transitionMaskRef.value?.changeMessage(message));
 bus?.on('message-box:show', ([message = '', duration]: any = []) => messageBoxRef.value?.show(message || '', duration));
+
 </script>
 
 <template>
-  <div class="container">
+  <div ref="containerRef" class="container">
     <RouterView />
   </div>
   <message-box ref="messageBoxRef"></message-box>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { nextTick } from 'vue';
 import { ref } from 'vue';
 
 let timer: number;
@@ -14,19 +13,36 @@ const _show = (_message: string, duration: number = 2000) => {
   if(showing.value)
     showing.value = false;
   show.value = true;
-  animationEnd.value = () => {
+  clearTimeout(timer);
+  timer = setTimeout(() => {
     showing.value = false;
-    clearTimeout(timer);
     timer = setTimeout(() => {
       if(hiding.value)
         hiding.value = false;
-      animationEnd.value = () => {
+      timer = setTimeout(() => {
         hiding.value = false;
         show.value = false;
-      };
+      }, 490);
+      // animationEnd.value = () => {
+      //   hiding.value = false;
+      //   show.value = false;
+      // };
       hiding.value = true;
     }, duration);
-  };
+  }, 490);
+  // animationEnd.value = () => {
+  //   showing.value = false;
+  //   clearTimeout(timer);
+  //   timer = setTimeout(() => {
+  //     if(hiding.value)
+  //       hiding.value = false;
+  //     animationEnd.value = () => {
+  //       hiding.value = false;
+  //       show.value = false;
+  //     };
+  //     hiding.value = true;
+  //   }, duration);
+  // };
   showing.value = true;
 }
 

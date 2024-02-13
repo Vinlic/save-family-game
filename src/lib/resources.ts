@@ -3,8 +3,8 @@
  */
 export default {
     images: {
-        // 陌生人骗局图像
-        'scene_stranger_scam': '/scene_images/e6eac49e-3af6-5de5-952b-39bd310859da_0.jpg',
+        // 礼品兑换骗局图像
+        'scene_gift_redemption_scam': '/scene_images/26618b0b-6f55-58e4-b567-9b3a28712059_0.jpg',
         // 招聘骗局图像
         'scene_resume_scam': '/scene_images/0de35832-43fc-599b-9e19-cc781315ab5d_0.jpg',
         // 采茶女骗局图像

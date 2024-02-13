@@ -22,6 +22,7 @@ const bus = instance?.proxy?.$bus;
 const containerRef = ref<HTMLDivElement>();
 const textareaRef = ref<HTMLTextAreaElement>();
 const currentSave = saveManager.currentSave as Save;
+const scene = scenesMap[currentSave.currentSceneId];
 
 onMounted(() => {
   bus?.emit('transition-mask:off');
@@ -29,14 +30,14 @@ onMounted(() => {
 });
 
 const inputText = (e: Event) => {
-  if (!textareaRef.value || textareaRef.value?.scrollHeight <= 54)
+  if (!textareaRef.value || textareaRef.value?.scrollHeight <= 56)
     return;
-  textareaRef.value.style.height = '54px';
+  textareaRef.value.style.height = '56px';
   if (textareaRef.value?.scrollHeight > 300)
     textareaRef.value.style.overflowY = 'auto';
   else
     textareaRef.value.style.overflowY = 'hidden';
-  textareaRef.value.style.height = `${textareaRef.value?.scrollHeight + 3}px`;
+  textareaRef.value.style.height = `${textareaRef.value?.scrollHeight > 56 ? textareaRef.value?.scrollHeight : 56}px`;
 };
 
 </script>
@@ -50,8 +51,8 @@ const inputText = (e: Event) => {
           <img :src="loader.getResUrl(scenesMap[currentSave.currentSceneId]?.coverResId)" />
         </div>
         <div class="event-item-content">
-          <span>{{ scenesMap[currentSave.currentSceneId]?.name }}</span>
-          <span>一个</span>
+          <span>{{ scene.name }}</span>
+          <span>{{ scene.description }}</span>
         </div>
       </div>
       <div class="message-item message-item-left">
@@ -75,7 +76,9 @@ const inputText = (e: Event) => {
     <div class="message-input-container">
       <textarea ref="textareaRef" class="textarea" placeholder="说点什么..." @input="inputText"></textarea>
       <div class="send-button-container nes-pointer">
-        <img src="@/assets/images/send.png" />
+        <div>
+          <img src="@/assets/images/send.png" />
+        </div>
       </div>
     </div>
   </div>
