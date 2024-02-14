@@ -6,6 +6,7 @@ class OnlineShoppingScam extends Scene {
         super({
             id: 'online-shopping-scam',
             name: '蝇头小利',
+            description: '',
             coverResId: 'images.scene_online_shopping_scam' 
         });
     }

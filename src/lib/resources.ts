@@ -19,8 +19,8 @@ export default {
         'scene_lost_express_scam': '/scene_images/ad19ce54-d727-5079-b271-e4d8b4f51418_0.jpg',
         // 家人意外骗局图像
         'scene_family_accident_scam': '/scene_images/d69ef852-68ee-53ed-a28a-b8072804ad7a_0.jpg',
-        // 电话操控骗局图像
-        'scene_phone_manipulation_scam': '/scene_images/4e618547-a912-5c8d-8a03-9aaa7e1792ef_0.jpg',
+        // 精神操控骗局图像
+        'scene_mental_manipulation_scam': '/scene_images/4e618547-a912-5c8d-8a03-9aaa7e1792ef_0.jpg',
         // 冒充公检法骗局图像
         'scene_impersonating_public_security_procuratorate_scam': '/scene_images/a9bde1ee-8764-5fea-9e86-1d5f27d6182e_0.jpg',
         // 网贷骗局图像

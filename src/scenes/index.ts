@@ -7,7 +7,7 @@ import internetDatingScam from "./internet-dating-scam";
 import nudeChatScam from "./nude-chat-scam";
 import lostExpressScam from "./lost-express-scam";
 import familyAccidentScam from "./family-accident-scam";
-import phoneManipulationScam from "./phone-manipulation-scam";
+import mentalManipulationScam from "./mental-manipulation-scam";
 import impersonatingPublicSecurityProcuratorateScam from "./impersonating-public-security-procuratorate-scam";
 import onlineLoanScam from "./online-loan-scam";
 import mlmScam from "./mlm-scam";
@@ -42,8 +42,8 @@ const scenes = [
     // 家人意外骗局
     familyAccidentScam,
 
-    // 电话操控骗局
-    phoneManipulationScam,
+    // 精神操控骗局
+    mentalManipulationScam,
 
     // 冒充公检法骗局
     impersonatingPublicSecurityProcuratorateScam,
