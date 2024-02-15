@@ -2,7 +2,7 @@ import Scene from "@/lib/Scene";
 import giftRedemptionScam from "./gift-redemption-scam";
 import resumeScam from "./resume-scam";
 import teaPickingGirlScam from "./tea-picking-girl-scam";
-import onlineShoppingScam from "./online-shopping-scam";
+import burshingOrdersScam from "./brushing-orders-scam";
 import internetDatingScam from "./internet-dating-scam";
 import nudeChatScam from "./nude-chat-scam";
 import lostExpressScam from "./lost-express-scam";
@@ -27,8 +27,8 @@ const scenes = [
     // 采茶女骗局
     teaPickingGirlScam,
 
-    // 网购骗局
-    onlineShoppingScam,
+    // 刷单骗局
+    burshingOrdersScam,
 
     // 网络交友骗局
     internetDatingScam,

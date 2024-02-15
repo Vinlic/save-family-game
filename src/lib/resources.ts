@@ -9,8 +9,8 @@ export default {
         'scene_resume_scam': '/scene_images/0de35832-43fc-599b-9e19-cc781315ab5d_0.jpg',
         // 采茶女骗局图像
         'scene_tea_picking_girl_scam': '/scene_images/6486b4f0-97b5-5f94-be28-f6b45e403f1e_0.jpg',
-        // 网购骗局图像
-        'scene_online_shopping_scam': '/scene_images/b92b4adc-bad1-5141-9458-9c2345ebad5d_0.jpg',
+        // 刷单骗局图像
+        'scene_brushing_orders_scam': '/scene_images/b92b4adc-bad1-5141-9458-9c2345ebad5d_0.jpg',
         // 网络交友骗局图像
         'scene_internet_dating_scam': '/scene_images/b8ab6dd2-8f81-5bd3-b9b8-a607048d3242_0.jpg',
         // 裸聊骗局图像

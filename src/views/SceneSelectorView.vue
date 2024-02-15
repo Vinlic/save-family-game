@@ -98,6 +98,7 @@ const getScoreStyleClass = (score: number = 0, index: number, p: any) => {
                 return ' is-transparent';
             if (score < 100)
                 return ' is-half';
+            return '';
     }
 };
 
