@@ -39,7 +39,7 @@ export default {
         // 头像
         'avatar_1': '/role_avatars/1.jpg',
         // 头像
-        'avatar_2': '/role_avatars/2.jpg',
+        'avatar_self': '/role_avatars/2.jpg',
     },
     fonts:{
         // 像素字体
