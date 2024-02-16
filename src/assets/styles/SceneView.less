@@ -57,6 +57,10 @@
   animation: message-item-animate 1s ease;
 }
 
+.message-container-right {
+  text-align: right;
+}
+
 .message-item-left {
   justify-content: flex-start;
 }
@@ -69,6 +73,7 @@
   width: 42px;
   height: 42px;
   user-select: none;
+  flex-shrink: 0;
 }
 
 .message-avatar > img {
@@ -77,14 +82,14 @@
 }
 
 .message-name {
-    margin-top: -3px;
-    margin-bottom: 5px;
-    font-size: 12px;
-    color: #ccc;
-    font-weight: bold;
-    position: relative;
-    z-index: 2;
-    display: block;
+  margin-top: -3px;
+  margin-bottom: 5px;
+  font-size: 12px;
+  color: #ccc;
+  font-weight: bold;
+  position: relative;
+  z-index: 2;
+  display: block;
 }
 
 .message-name-left {
@@ -97,6 +102,8 @@
 }
 
 .message-content {
+  text-align: left;
+  max-width: 90%;
   padding: 8px 12px;
   background: #f5f5f5;
   border-radius: 3px;

@@ -37,7 +37,9 @@ export default {
         'scene_health_product_scam': '/scene_images/09947ed8-6145-552b-87d9-573399fa1555_0.jpg',
 
         // 头像
-        'avatar_1': '/role_avatars/1.jpg'
+        'avatar_1': '/role_avatars/1.jpg',
+        // 头像
+        'avatar_2': '/role_avatars/2.jpg',
     },
     fonts:{
         // 像素字体
