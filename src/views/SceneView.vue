@@ -57,6 +57,16 @@ const inputText = () => {
   textarea.style.height = `${textarea?.scrollHeight > 56 ? textarea?.scrollHeight + 8 : 56}px`;
 };
 
+const pushMessage = (message: Message) => {
+  messageListRef.value.push(message);
+  nextTick(() => {
+    const container = messageListContainerRef.value;
+    if (!container)
+      return;
+    container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+  });
+}
+
 const sendMessage = (e: KeyboardEvent) => {
   const textarea = textareaRef.value;
   if (e.shiftKey && textarea) {
@@ -64,18 +74,17 @@ const sendMessage = (e: KeyboardEvent) => {
     inputText();
     return;
   }
-  messageListRef.value.push({
+  const content = textarea?.value || '';
+  if(!content)
+    return;
+  pushMessage({
     type: 'self',
     roleName: '我',
     roleAvatarResId: 'images.avatar_self',
-    content: '测试消息'
+    content
   });
-  nextTick(() => {
-    const container = messageListContainerRef.value;
-    if (!container)
-      return;
-    container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
-  });
+  if(textarea)
+    textarea.value = '';
 }
 
 loadInitialMessages();

@@ -1,6 +1,5 @@
 <script lang="ts">
 import saveManager from '@/lib/save-manager';
-import { nextTick } from 'vue';
 
 export default {
     beforeRouteEnter(to: any, from: any, next) {
