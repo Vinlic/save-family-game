@@ -1,6 +1,23 @@
+import { isUndefined } from 'lodash-es';
+
 const util = {
 
-    timestamp: () => Date.now(),
+    unixTimestamp() {
+        return Math.floor(Date.now() / 1000);
+    },
+
+    timestamp() {
+        return Date.now();
+    },
+
+    buildQueryString(query: {[key: string]: any}) {
+        let queryString = '';
+        for(let key in query)
+            if(!isUndefined(query[key]))
+                queryString += `${key}=${query[key]}&`;
+        queryString && (queryString = `?${queryString.slice(0, -1)}`);
+        return queryString;
+    },
 
     dateFormat: (date: Date) => {
         const year = date.getFullYear();

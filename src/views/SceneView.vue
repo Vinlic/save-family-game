@@ -1,5 +1,6 @@
 <script lang="ts">
 import { scenesMap } from '@/scenes';
+import type { Message } from '@/lib/Scene';
 import saveManager from '@/lib/save-manager';
 
 export default {
@@ -21,13 +22,25 @@ const bus = instance?.proxy?.$bus;
 
 const containerRef = ref<HTMLDivElement>();
 const textareaRef = ref<HTMLTextAreaElement>();
+const inputHiddenRef = ref<boolean>(true);
 const currentSave = saveManager.currentSave as Save;
 const scene = scenesMap[currentSave.currentSceneId];
+const messageListRef = ref<Message[]>([]);
 
 onMounted(() => {
   bus?.emit('transition-mask:off');
   containerRef.value?.focus();
 });
+
+const loadInitialMessages = () => {
+  scene.initialMessages.forEach((message, index) => {
+    setTimeout(() => {
+      messageListRef.value.push(message);
+      if(index == scene.initialMessages.length - 1)
+        setTimeout(() => inputHiddenRef.value = false, 500);
+    }, (index + 1) * 1000);
+  });
+}
 
 const inputText = (e: Event) => {
   if (!textareaRef.value || textareaRef.value?.scrollHeight <= 56)
@@ -40,6 +53,7 @@ const inputText = (e: Event) => {
   textareaRef.value.style.height = `${textareaRef.value?.scrollHeight > 56 ? textareaRef.value?.scrollHeight : 56}px`;
 };
 
+loadInitialMessages();
 </script>
 
 <template>
@@ -55,7 +69,7 @@ const inputText = (e: Event) => {
           <span>{{ scene.description }}</span>
         </div>
       </div>
-      <template v-for="message in scene.initialMessages">
+      <template v-for="message in messageListRef">
         <div v-if="message.type == 'self'" class="message-item message-item-right">
           <div class="message-container message-container-right">
             <span class="message-name message-name-right">{{ message.roleName }}</span>
@@ -81,7 +95,7 @@ const inputText = (e: Event) => {
       </template>
       <div class="bottom-block"></div>
     </div>
-    <div class="message-input-container">
+    <div v-show="!inputHiddenRef" class="message-input-container">
       <textarea ref="textareaRef" class="textarea" placeholder="说点什么..." @input="inputText"></textarea>
       <div class="send-button-container nes-pointer">
         <div>

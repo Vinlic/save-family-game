@@ -1,4 +1,4 @@
-interface Message {
+export interface Message {
     type?: string;
     roleAvatarResId: string;
     roleName: string,
