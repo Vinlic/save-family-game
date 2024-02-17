@@ -21,7 +21,6 @@ import loader from '@/lib/loader';
 const instance = getCurrentInstance();
 const bus = instance?.proxy?.$bus;
 
-const containerRef = ref<HTMLDivElement>();
 const textareaRef = ref<HTMLTextAreaElement>();
 const messageListContainerRef = ref<HTMLDivElement>();
 const inputHiddenRef = ref<boolean>(true);
@@ -31,7 +30,6 @@ const messageListRef = ref<Message[]>([]);
 
 onMounted(() => {
   bus?.emit('transition-mask:off');
-  containerRef.value?.focus();
 });
 
 const loadInitialMessages = () => {
@@ -39,7 +37,10 @@ const loadInitialMessages = () => {
     setTimeout(() => {
       messageListRef.value.push(message);
       if (index == scene.initialMessages.length - 1)
-        setTimeout(() => inputHiddenRef.value = false, 500);
+        setTimeout(() => {
+          inputHiddenRef.value = false;
+          nextTick(() => textareaRef.value?.focus());
+        }, 500);
     }, (index + 1) * 1000);
   });
 }
@@ -58,7 +59,7 @@ const inputText = () => {
 
 const sendMessage = (e: KeyboardEvent) => {
   const textarea = textareaRef.value;
-  if(e.shiftKey && textarea) {
+  if (e.shiftKey && textarea) {
     textarea.value += '\n';
     inputText();
     return;
@@ -71,7 +72,7 @@ const sendMessage = (e: KeyboardEvent) => {
   });
   nextTick(() => {
     const container = messageListContainerRef.value;
-    if(!container)
+    if (!container)
       return;
     container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
   });
@@ -81,7 +82,7 @@ loadInitialMessages();
 </script>
 
 <template>
-  <div ref="containerRef" class="container" tabindex="-1">
+  <div class="container">
     <div ref="messageListContainerRef" class="message-list">
       <div style="height:1px"></div>
       <div class="event-item">
@@ -121,7 +122,7 @@ loadInitialMessages();
     </div>
     <div v-show="!inputHiddenRef" class="message-input-container">
       <textarea ref="textareaRef" class="textarea" placeholder="说点什么..." @input="inputText"
-        @keydown.enter.prevent="sendMessage"></textarea>
+        @keydown.enter.prevent="sendMessage" autofocus tabindex="-1"></textarea>
       <div class="send-button-container nes-pointer">
         <div>
           <img src="@/assets/images/send.png" />
