@@ -132,11 +132,11 @@ window.addEventListener('resize', resize);
             </template>
         </div>
         <div v-show="currentIndex != 0" class="arrow arrow-left nes-pointer" @click="switchLeft">
-            <img src="@/assets/images/arrow.png" />
+            <img src="@/assets/images/triangle.png" />
         </div>
         <div v-show="currentIndex != Math.ceil(scenes.length / slideSize) - 1" class="arrow arrow-right nes-pointer"
             @click="switchRight">
-            <img src="@/assets/images/arrow.png" />
+            <img src="@/assets/images/triangle.png" />
         </div>
     </div>
 </template>

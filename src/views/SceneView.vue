@@ -3,6 +3,7 @@ import { nextTick } from 'vue';
 import { scenesMap } from '@/scenes';
 import type { Message } from '@/lib/Scene';
 import saveManager from '@/lib/save-manager';
+import router from '@/router';
 
 export default {
   beforeRouteEnter(to: any, from: any, next) {
@@ -87,11 +88,30 @@ const sendMessage = (e: KeyboardEvent) => {
     textarea.value = '';
 }
 
+const navigateToSceneSelector = () => {
+  bus?.emit('transition-mask:on', ['逃离骗局...', () => router.push('scene-list')]);
+}
+
+const openSharePanel = () => {
+
+}
+
 loadInitialMessages();
 </script>
 
 <template>
   <div class="container">
+    <div class="header-bar">
+      <span>堂弟</span>
+      <div class="header-button-bar">
+        <div @click="navigateToSceneSelector">
+          <img src="@/assets/images/arrow.png" />
+        </div>
+        <div @click="openSharePanel">
+          <img src="@/assets/images/forward.png" />
+        </div>
+      </div>
+    </div>
     <div ref="messageListContainerRef" class="message-list">
       <div style="height:1px"></div>
       <div class="event-item">
@@ -122,7 +142,7 @@ loadInitialMessages();
           <div class="message-container message-container-left">
             <span class="message-name message-name-left">{{ message.roleName }}</span>
             <div class="message-content message-content-left">
-              <span>{{ message.content }}</span>
+              <span>对方正在输入{{ message.content }}</span>
             </div>
           </div>
         </div>
