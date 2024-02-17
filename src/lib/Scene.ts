@@ -1,5 +1,5 @@
 export interface Message {
-    type?: string;
+    type: string;
     roleAvatarResId: string;
     roleName: string,
     content: string;
